@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#0F172A"/>
+  <circle cx="1010" cy="122" r="160" fill="#2563EB" fill-opacity="0.18"/>
+  <circle cx="936" cy="494" r="210" fill="#22C55E" fill-opacity="0.12"/>
+  <rect x="80" y="88" width="1040" height="454" rx="32" fill="#111827" stroke="#1E293B"/>
+  <text x="120" y="220" fill="#2563EB" font-family="Arial, sans-serif" font-size="28" letter-spacing="8">VAIBHAV SINGH</text>
+  <text x="120" y="304" fill="#E5E7EB" font-family="Arial, sans-serif" font-size="60" font-weight="700">Software Development Engineer</text>
+  <text x="120" y="370" fill="#94A3B8" font-family="Arial, sans-serif" font-size="28">Backend Engineer building scalable distributed systems.</text>
+  <text x="120" y="430" fill="#22C55E" font-family="Courier New, monospace" font-size="24">$ Java • Spring Boot • Cloud • Elasticsearch</text>
+</svg>

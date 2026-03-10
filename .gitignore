@@ -1,0 +1,11 @@
+frontend/.next/
+frontend/node_modules/
+frontend/out/
+frontend/.env.local
+frontend/.env
+backend/target/
+backend/.mvn/
+backend/.env
+backend/.idea/
+.DS_Store
+Thumbs.db

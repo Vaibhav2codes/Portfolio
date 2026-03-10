@@ -1,0 +1,24 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+app:
+  cors:
+    allowed-origin: ${FRONTEND_URL:http://localhost:3000}
+
+portfolio:
+  contact:
+    to-email: ${CONTACT_TO_EMAIL:vaibhav2112001@gmail.com}
+    from-email: ${CONTACT_FROM_EMAIL:no-reply@portfolio.local}
+
+spring:
+  mail:
+    host: ${SMTP_HOST:}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_PROPERTIES_MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${SMTP_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE:true}
