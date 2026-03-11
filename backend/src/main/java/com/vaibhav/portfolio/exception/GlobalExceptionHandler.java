@@ -3,6 +3,8 @@ package com.vaibhav.portfolio.exception;
 import com.vaibhav.portfolio.dto.ApiResponse;
 import com.vaibhav.portfolio.dto.ResumeMetadataResponse;
 import com.vaibhav.portfolio.dto.ResumeUploadResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> handleValidation(MethodArgumentNotValidException exception) {
@@ -30,6 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse> handleUnexpected(RuntimeException exception) {
+        logger.error("Unhandled runtime exception in API request.", exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiResponse(false, "Unable to send message right now. Please try again later."));
     }

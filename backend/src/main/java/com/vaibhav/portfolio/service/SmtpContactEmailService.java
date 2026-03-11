@@ -5,13 +5,17 @@ import com.vaibhav.portfolio.dto.ContactRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
 public class SmtpContactEmailService implements ContactEmailService {
+    private static final Logger logger = LoggerFactory.getLogger(SmtpContactEmailService.class);
 
     private final JavaMailSender mailSender;
     private final PortfolioMailProperties properties;
@@ -47,8 +51,15 @@ public class SmtpContactEmailService implements ContactEmailService {
             helper.setText(buildEmailBody(request), false);
 
             mailSender.send(message);
+        } catch (MailException exception) {
+            logger.error("SMTP delivery failed via host {} for sender {} and recipient {}",
+                    smtpHost, properties.fromEmail(), properties.toEmail(), exception);
+            throw new IllegalStateException(
+                    "SMTP delivery failed. Check SMTP credentials, verified sender, and provider settings."
+            );
         } catch (MessagingException exception) {
-            throw new RuntimeException("Failed to build contact email.", exception);
+            logger.error("Failed to build contact email message.", exception);
+            throw new IllegalStateException("Failed to build contact email message.");
         }
     }
 
