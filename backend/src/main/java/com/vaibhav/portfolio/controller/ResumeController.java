@@ -3,8 +3,8 @@ package com.vaibhav.portfolio.controller;
 import com.vaibhav.portfolio.dto.ResumeMetadataResponse;
 import com.vaibhav.portfolio.dto.ResumeUploadResponse;
 import com.vaibhav.portfolio.service.ResumeStorageService;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/resume")
@@ -32,13 +33,12 @@ public class ResumeController {
     }
 
     @GetMapping("/file")
-    public ResponseEntity<Resource> downloadResume() throws IOException {
-        Resource resource = resumeStorageService.loadResumeResource();
+    public ResponseEntity<Void> downloadResume() {
+        URI publicResumeUri = resumeStorageService.getPublicResumeUri();
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"resume.pdf\"")
-                .body(resource);
+        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
+                .header(HttpHeaders.LOCATION, publicResumeUri.toString())
+                .build();
     }
 
     @PostMapping(value = "/admin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

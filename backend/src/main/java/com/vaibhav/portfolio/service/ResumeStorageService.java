@@ -3,19 +3,21 @@ package com.vaibhav.portfolio.service;
 import com.vaibhav.portfolio.config.PortfolioResumeProperties;
 import com.vaibhav.portfolio.dto.ResumeMetadataResponse;
 import com.vaibhav.portfolio.dto.ResumeUploadResponse;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.net.URI;
 import java.security.MessageDigest;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 @Service
@@ -25,16 +27,40 @@ public class ResumeStorageService {
     private static final byte[] PDF_SIGNATURE = "%PDF-".getBytes();
 
     private final PortfolioResumeProperties resumeProperties;
+    private final RestClient restClient;
 
-    public ResumeStorageService(PortfolioResumeProperties resumeProperties) {
+    public ResumeStorageService(
+            PortfolioResumeProperties resumeProperties,
+            RestClient.Builder restClientBuilder
+    ) {
         this.resumeProperties = resumeProperties;
+        this.restClient = restClientBuilder
+                .baseUrl(normalizeBaseUrl(resumeProperties.supabaseUrl()))
+                .build();
     }
 
     public ResumeMetadataResponse getMetadata() throws IOException {
-        Path resumePath = getResumePath();
-        String lastUpdated = Files.exists(resumePath)
-                ? Files.getLastModifiedTime(resumePath).toInstant().toString()
-                : null;
+        validatePublicConfig();
+
+        String lastUpdated = null;
+
+        try {
+            ResponseEntity<Void> response = restClient.head()
+                    .uri(getPublicResumeUri())
+                    .retrieve()
+                    .toBodilessEntity();
+
+            String lastModifiedHeader = response.getHeaders().getFirst(HttpHeaders.LAST_MODIFIED);
+            if (StringUtils.hasText(lastModifiedHeader)) {
+                lastUpdated = ZonedDateTime.parse(lastModifiedHeader, DateTimeFormatter.RFC_1123_DATE_TIME)
+                        .toInstant()
+                        .toString();
+            }
+        } catch (RestClientResponseException exception) {
+            if (exception.getStatusCode().value() != 404) {
+                throw new IOException("Unable to fetch resume metadata from Supabase.", exception);
+            }
+        }
 
         return new ResumeMetadataResponse(true, "Resume metadata fetched successfully.", RESUME_FILE_NAME, lastUpdated);
     }
@@ -42,55 +68,65 @@ public class ResumeStorageService {
     public ResumeUploadResponse replaceResume(String password, MultipartFile file) throws IOException {
         validatePassword(password);
         validateFile(file);
-
-        Path resumePath = getResumePath();
-        Path parentDirectory = resumePath.getParent();
-
-        if (parentDirectory == null) {
-            throw new IllegalStateException("Resume storage path is invalid.");
-        }
-
-        Files.createDirectories(parentDirectory);
-        Path tempFile = Files.createTempFile(parentDirectory, "resume-upload-", ".pdf");
+        validateUploadConfig();
 
         try {
-            file.transferTo(tempFile);
-
-            if (!hasPdfSignature(tempFile)) {
+            byte[] fileBytes = file.getBytes();
+            if (!hasPdfSignature(fileBytes)) {
                 throw new IllegalArgumentException("Uploaded file is not a valid PDF.");
             }
 
-            moveIntoPlace(tempFile, resumePath);
+            restClient.post()
+                    .uri("/storage/v1/object/{bucket}/{objectPath}",
+                            resumeProperties.supabaseBucket(),
+                            resumeProperties.supabaseObjectPath())
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + resumeProperties.supabaseServiceRoleKey())
+                    .header("apikey", resumeProperties.supabaseServiceRoleKey())
+                    .header("x-upsert", "true")
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(fileBytes)
+                    .retrieve()
+                    .toBodilessEntity();
 
             return new ResumeUploadResponse(
                     true,
                     "Resume updated successfully",
                     RESUME_FILE_NAME,
-                    Files.getLastModifiedTime(resumePath).toInstant().toString()
+                    java.time.Instant.now().toString()
             );
-        } finally {
-            Files.deleteIfExists(tempFile);
+        } catch (RestClientResponseException exception) {
+            throw new IOException("Failed to upload resume to Supabase Storage.", exception);
         }
     }
 
-    public Resource loadResumeResource() throws IOException {
-        Path resumePath = getResumePath();
-
-        if (!Files.exists(resumePath)) {
-            throw new NoSuchFileException("Resume file has not been uploaded yet.");
-        }
-
-        return new FileSystemResource(resumePath);
+    public URI getPublicResumeUri() {
+        validatePublicConfig();
+        return URI.create(
+                normalizeBaseUrl(resumeProperties.supabaseUrl())
+                        + "/storage/v1/object/public/"
+                        + resumeProperties.supabaseBucket()
+                        + "/"
+                        + resumeProperties.supabaseObjectPath()
+        );
     }
 
-    Path getResumePath() {
-        String configuredPath = resumeProperties.storagePath();
-
-        if (configuredPath == null || configuredPath.isBlank()) {
-            throw new IllegalStateException("Resume storage path is not configured.");
+    private void validatePublicConfig() {
+        if (!StringUtils.hasText(resumeProperties.supabaseUrl())) {
+            throw new IllegalStateException("Supabase URL is not configured for resume storage.");
         }
+        if (!StringUtils.hasText(resumeProperties.supabaseBucket())) {
+            throw new IllegalStateException("Supabase bucket is not configured for resume storage.");
+        }
+        if (!StringUtils.hasText(resumeProperties.supabaseObjectPath())) {
+            throw new IllegalStateException("Supabase object path is not configured for resume storage.");
+        }
+    }
 
-        return Path.of(configuredPath).toAbsolutePath().normalize();
+    private void validateUploadConfig() {
+        validatePublicConfig();
+        if (!StringUtils.hasText(resumeProperties.supabaseServiceRoleKey())) {
+            throw new IllegalStateException("Supabase service role key is not configured for resume storage.");
+        }
     }
 
     private void validatePassword(String password) {
@@ -130,18 +166,17 @@ public class ResumeStorageService {
         }
     }
 
-    private boolean hasPdfSignature(Path filePath) throws IOException {
-        try (InputStream inputStream = Files.newInputStream(filePath)) {
+    private boolean hasPdfSignature(byte[] fileBytes) throws IOException {
+        try (InputStream inputStream = new java.io.ByteArrayInputStream(fileBytes)) {
             byte[] header = inputStream.readNBytes(PDF_SIGNATURE.length);
             return MessageDigest.isEqual(PDF_SIGNATURE, header);
         }
     }
 
-    private void moveIntoPlace(Path source, Path target) throws IOException {
-        try {
-            Files.move(source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-        } catch (AtomicMoveNotSupportedException exception) {
-            Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
+    private String normalizeBaseUrl(String value) {
+        if (!StringUtils.hasText(value)) {
+            return "";
         }
+        return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
     }
 }

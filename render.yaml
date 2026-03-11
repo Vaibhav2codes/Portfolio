@@ -9,14 +9,20 @@ services:
     envVars:
       - key: RESUME_ADMIN_PASSWORD
         sync: false
-      - key: RESUME_STORAGE_PATH
-        value: /var/data/resume.pdf
       - key: RESUME_MAX_FILE_SIZE_BYTES
         value: "5242880"
       - key: RESUME_MULTIPART_MAX_FILE_SIZE
         value: 5MB
       - key: RESUME_MULTIPART_MAX_REQUEST_SIZE
         value: 5MB
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_BUCKET
+        value: portfolio-assets
+      - key: SUPABASE_OBJECT_PATH
+        value: resume.pdf
       - key: FRONTEND_URL
         sync: false
       - key: CONTACT_TO_EMAIL
@@ -35,10 +41,6 @@ services:
         value: "true"
       - key: SMTP_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
         value: "true"
-    disk:
-      name: resume-storage
-      mountPath: /var/data
-      sizeGB: 1
 
   - type: web
     name: portfolio-frontend

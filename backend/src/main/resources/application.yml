@@ -11,8 +11,11 @@ portfolio:
     from-email: ${CONTACT_FROM_EMAIL:no-reply@portfolio.local}
   resume:
     admin-password: ${RESUME_ADMIN_PASSWORD:}
-    storage-path: ${RESUME_STORAGE_PATH:${user.home}/portfolio/resume.pdf}
     max-file-size-bytes: ${RESUME_MAX_FILE_SIZE_BYTES:5242880}
+    supabase-url: ${SUPABASE_URL:}
+    supabase-service-role-key: ${SUPABASE_SERVICE_ROLE_KEY:}
+    supabase-bucket: ${SUPABASE_BUCKET:portfolio-assets}
+    supabase-object-path: ${SUPABASE_OBJECT_PATH:resume.pdf}
 
 spring:
   servlet:

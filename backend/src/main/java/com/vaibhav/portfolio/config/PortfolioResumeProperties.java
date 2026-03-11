@@ -5,7 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "portfolio.resume")
 public record PortfolioResumeProperties(
         String adminPassword,
-        String storagePath,
-        long maxFileSizeBytes
+        long maxFileSizeBytes,
+        String supabaseUrl,
+        String supabaseServiceRoleKey,
+        String supabaseBucket,
+        String supabaseObjectPath
 ) {
 }
