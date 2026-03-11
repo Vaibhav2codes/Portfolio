@@ -4,6 +4,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(PortfolioMailProperties.class)
+@EnableConfigurationProperties({PortfolioMailProperties.class, PortfolioResumeProperties.class})
 public class PropertiesConfig {
 }

@@ -25,16 +25,13 @@ export function ContactForm() {
     setFeedback("");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/api/contact`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(form)
-        }
-      );
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
 
       const payload = (await response.json()) as { message?: string };
 
@@ -53,7 +50,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-glow backdrop-blur">
+    <form onSubmit={handleSubmit} className="surface-card space-y-5 rounded-[2rem] p-6 backdrop-blur dark:shadow-glow">
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="space-y-2 text-sm">
           <span className="text-[var(--muted)]">Name</span>
@@ -61,7 +58,7 @@ export function ContactForm() {
             required
             value={form.name}
             onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-            className="w-full rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+            className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
             placeholder="Your name"
           />
         </label>
@@ -72,7 +69,7 @@ export function ContactForm() {
             type="email"
             value={form.email}
             onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-            className="w-full rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+            className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
             placeholder="you@example.com"
           />
         </label>
@@ -83,8 +80,8 @@ export function ContactForm() {
           required
           value={form.subject}
           onChange={(event) => setForm((current) => ({ ...current, subject: event.target.value }))}
-          className="w-full rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
-          placeholder="Hiring discussion"
+          className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+          placeholder="Message subject or title"
         />
       </label>
       <label className="space-y-2 text-sm">
@@ -94,7 +91,7 @@ export function ContactForm() {
           rows={6}
           value={form.message}
           onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
-          className="w-full rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+          className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
           placeholder="Tell me about the role, team or problem space."
         />
       </label>

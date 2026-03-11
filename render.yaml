@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: portfolio-backend
+    runtime: java
+    rootDir: backend
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/portfolio-backend-1.0.0.jar
+    healthCheckPath: /api/health
+    envVars:
+      - key: RESUME_ADMIN_PASSWORD
+        sync: false
+      - key: RESUME_STORAGE_PATH
+        value: /var/data/resume.pdf
+      - key: RESUME_MAX_FILE_SIZE_BYTES
+        value: "5242880"
+      - key: RESUME_MULTIPART_MAX_FILE_SIZE
+        value: 5MB
+      - key: RESUME_MULTIPART_MAX_REQUEST_SIZE
+        value: 5MB
+      - key: FRONTEND_URL
+        sync: false
+      - key: CONTACT_TO_EMAIL
+        sync: false
+      - key: CONTACT_FROM_EMAIL
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_PROPERTIES_MAIL_SMTP_AUTH
+        value: "true"
+      - key: SMTP_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+        value: "true"
+    disk:
+      name: resume-storage
+      mountPath: /var/data
+      sizeGB: 1
+
+  - type: web
+    name: portfolio-frontend
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: BACKEND_INTERNAL_URL
+        fromService:
+          type: web
+          name: portfolio-backend
+          property: hostport

@@ -8,8 +8,8 @@ export function ProjectsSection() {
     <section id="projects" className="scroll-mt-28 py-8">
       <SectionHeading
         eyebrow="Projects"
-        title="Selected backend projects focused on observability, throughput and distributed workloads."
-        description="Project cards emphasize engineering scope, stack and impact so recruiters can quickly map experience to backend roles."
+        title=""
+        description=""
       />
 
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
@@ -20,7 +20,7 @@ export function ProjectsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.45, delay: index * 0.08 }}
-            className="group rounded-[2rem] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-primary/40 hover:bg-white/[0.07]"
+            className="surface-card group rounded-[2rem] p-6 transition hover:-translate-y-1 hover:border-primary/40"
           >
             <div className="flex items-center justify-between">
               <p className="font-mono text-sm uppercase tracking-[0.24em] text-primary">Project 0{index + 1}</p>

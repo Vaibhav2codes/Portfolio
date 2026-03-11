@@ -1,4 +1,5 @@
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { siteConfig } from "@/data/portfolio";
@@ -9,6 +10,21 @@ import { ExperienceSection } from "@/sections/experience";
 import { HeroSection } from "@/sections/hero";
 import { ProjectsSection } from "@/sections/projects";
 import { SkillsSection } from "@/sections/skills";
+
+const GithubActivity = dynamic(
+  () => import("@/components/github/GithubActivity").then((module) => module.GithubActivity),
+  {
+    ssr: false,
+    loading: () => (
+      <section id="github-activity" className="py-8">
+        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
+          <div className="h-5 w-40 animate-pulse rounded-full bg-white/10" />
+          <div className="mt-4 h-[360px] animate-pulse rounded-[1.5rem] bg-white/10" />
+        </div>
+      </section>
+    )
+  }
+);
 
 export default function HomePage() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -47,6 +63,7 @@ export default function HomePage() {
           <ProjectsSection />
           <SkillsSection />
           <AchievementsSection />
+          <GithubActivity username="Vaibhav2codes" />
           <ContactSection />
         </main>
         <Footer />

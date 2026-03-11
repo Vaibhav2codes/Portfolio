@@ -5,10 +5,11 @@ import {
   FaCode,
   FaFileArrowDown,
   FaGithub,
+  FaInstagram,
   FaLinkedin,
   FaXmark
 } from "react-icons/fa6";
-import { SiCodeforces, SiLeetcode } from "react-icons/si";
+import { SiCodechef, SiCodeforces, SiLeetcode } from "react-icons/si";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { navigationLinks, socialLinks } from "@/data/portfolio";
 
@@ -17,6 +18,8 @@ const iconMap = {
   linkedin: FaLinkedin,
   leetcode: SiLeetcode,
   codeforces: SiCodeforces,
+  codechef: SiCodechef,
+  instagram: FaInstagram,
   resume: FaFileArrowDown
 };
 
@@ -62,7 +65,7 @@ export function Navbar() {
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noreferrer" : undefined}
                 aria-label={link.label}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-base text-[var(--muted)] transition hover:border-primary/50 hover:text-primary"
+                className="surface-control inline-flex h-10 w-10 items-center justify-center rounded-full text-base text-[var(--muted)] transition hover:border-primary/50 hover:text-primary"
               >
                 <Icon />
               </a>
@@ -77,7 +80,7 @@ export function Navbar() {
             type="button"
             aria-label="Toggle menu"
             onClick={() => setOpen((value) => !value)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--foreground)]"
+            className="surface-control inline-flex h-10 w-10 items-center justify-center rounded-full text-[var(--foreground)]"
           >
             {open ? <FaXmark /> : <FaBarsStaggered />}
           </button>
@@ -97,7 +100,7 @@ export function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-[var(--foreground)]"
+                  className="surface-control rounded-2xl px-4 py-3 text-sm text-[var(--foreground)]"
                 >
                   {link.label}
                 </a>
@@ -113,7 +116,7 @@ export function Navbar() {
                       target={link.external ? "_blank" : undefined}
                       rel={link.external ? "noreferrer" : undefined}
                       aria-label={link.label}
-                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--muted)]"
+                      className="surface-control inline-flex h-10 w-10 items-center justify-center rounded-full text-[var(--muted)]"
                     >
                       <Icon />
                     </a>

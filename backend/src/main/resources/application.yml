@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:${SERVER_PORT:8080}}
 
 app:
   cors:
@@ -9,8 +9,16 @@ portfolio:
   contact:
     to-email: ${CONTACT_TO_EMAIL:vaibhav2112001@gmail.com}
     from-email: ${CONTACT_FROM_EMAIL:no-reply@portfolio.local}
+  resume:
+    admin-password: ${RESUME_ADMIN_PASSWORD:}
+    storage-path: ${RESUME_STORAGE_PATH:${user.home}/portfolio/resume.pdf}
+    max-file-size-bytes: ${RESUME_MAX_FILE_SIZE_BYTES:5242880}
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: ${RESUME_MULTIPART_MAX_FILE_SIZE:5MB}
+      max-request-size: ${RESUME_MULTIPART_MAX_REQUEST_SIZE:5MB}
   mail:
     host: ${SMTP_HOST:}
     port: ${SMTP_PORT:587}

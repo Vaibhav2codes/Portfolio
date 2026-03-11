@@ -20,9 +20,14 @@ export function SkillsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.45, delay: index * 0.05 }}
-            className="rounded-[2rem] border border-white/10 bg-white/5 p-6"
+            className="surface-card rounded-[2rem] p-6 transition duration-300 hover:-translate-y-1 hover:border-primary/20 dark:hover:border-primary/35"
           >
-            <h3 className="text-xl font-semibold text-[var(--foreground)]">{group.title}</h3>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-xl font-semibold text-[var(--foreground)]">{group.title}</h3>
+              <span className="surface-subtle rounded-full px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
+                {group.items.length} items
+              </span>
+            </div>
             <div className="mt-5 flex flex-wrap gap-2">
               {group.items.map((item) => (
                 <Chip key={item}>{item}</Chip>

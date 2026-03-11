@@ -18,7 +18,7 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative grid min-h-[calc(100vh-5rem)] items-center gap-12 py-16 lg:grid-cols-[1.25fr_0.75fr] lg:py-24"
+      className="relative grid gap-12 py-12 lg:min-h-[42rem] lg:grid-cols-[1.25fr_0.75fr] lg:items-start lg:py-16"
     >
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -27,7 +27,7 @@ export function HeroSection() {
         className="max-w-3xl"
       >
         <Chip className="mb-6 border-primary/20 bg-primary/10 text-primary">
-          Software Development Engineer 1 • Cleartrip Packages Team
+          Software Development Engineer 1
         </Chip>
         <h1 className="text-5xl font-semibold leading-tight tracking-tight text-[var(--foreground)] sm:text-6xl lg:text-7xl">
           {siteConfig.name}
@@ -36,7 +36,7 @@ export function HeroSection() {
         <p className="mt-6 max-w-3xl text-lg leading-8 text-[var(--muted)]">{siteConfig.shortSubtitle}</p>
         <p className="mt-5 max-w-3xl text-base leading-7 text-[var(--muted)]">{siteConfig.currentLine}</p>
 
-        <div className="mt-8 flex min-h-[4rem] items-center rounded-3xl border border-white/10 bg-black/20 px-5 py-4 font-mono text-sm text-accent shadow-glow">
+        <div className="surface-subtle mt-8 flex min-h-[4rem] items-center rounded-3xl px-5 py-4 font-mono text-sm text-accent dark:shadow-glow">
           <span className="mr-3 text-primary">$</span>
           Building with <span className="ml-2 text-[var(--foreground)]">{heroKeywords[index]}</span>
         </div>
@@ -50,16 +50,16 @@ export function HeroSection() {
             <FaArrowRight className="text-xs" />
           </a>
           <a
-            href="/Vaibhav_Singh_Resume.txt"
+            href="/resume.pdf"
             download
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:border-primary/50 hover:text-primary"
+            className="surface-control inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:border-primary/50 hover:text-primary"
           >
             Download Resume
             <FaFileArrowDown className="text-xs" />
           </a>
           <a
             href="#contact"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:border-primary/50 hover:text-primary"
+            className="surface-control inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:border-primary/50 hover:text-primary"
           >
             Contact Me
             <FaEnvelope className="text-xs" />
@@ -73,7 +73,7 @@ export function HeroSection() {
         transition={{ duration: 0.7, delay: 0.1 }}
         className="relative"
       >
-        <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(17,24,39,0.7))] p-6 shadow-glow">
+        <div className="rounded-[2rem] border border-slate-300/80 bg-[linear-gradient(180deg,rgba(248,250,252,0.98),rgba(226,232,240,0.94))] p-6 shadow-[0_24px_80px_rgba(148,163,184,0.32)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(17,24,39,0.7))] dark:shadow-glow">
           <div className="flex items-center gap-2 pb-5">
             <span className="h-3 w-3 rounded-full bg-rose-400" />
             <span className="h-3 w-3 rounded-full bg-amber-300" />
@@ -81,16 +81,18 @@ export function HeroSection() {
           </div>
           <div className="space-y-5 font-mono text-sm">
             <div>
-              <p className="text-primary">role.ts</p>
-              <p className="mt-2 text-[var(--muted)]">
+              <p className="text-blue-600 dark:text-primary">role.ts</p>
+              <p className="mt-2 text-slate-600 dark:text-slate-300">
                 export const engineer = &#123; focus: [&quot;backend&quot;, &quot;distributed systems&quot;, &quot;cloud&quot;] &#125;;
               </p>
             </div>
             <div>
-              <p className="text-primary">impact.log</p>
-              <p className="mt-2 text-[var(--muted)]">+30% throughput improvement in enterprise data pipelines</p>
-              <p className="text-[var(--muted)]">-50% logging latency using async ingestion workflows</p>
-              <p className="text-[var(--muted)]">Travel package backend APIs at Cleartrip</p>
+              <p className="text-blue-600 dark:text-primary">impact.log</p>
+              <p className="mt-2 text-slate-600 dark:text-slate-300">
+Built high-throughput logging pipeline (Log4j + ORC + async ingestion) improving enterprise API observability and debugging
+</p>
+              <p className="text-slate-600 dark:text-slate-300">-50% logging latency using async ingestion workflows</p>
+              <p className="text-slate-600 dark:text-slate-300">Travel package backend APIs at Cleartrip</p>
             </div>
           </div>
         </div>
@@ -102,7 +104,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: 0.15 + position * 0.08 }}
-              className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5"
+              className="surface-card rounded-[1.5rem] p-5"
             >
               <p className="text-2xl font-semibold text-[var(--foreground)]">{stat.value}</p>
               <p className="mt-2 text-sm text-[var(--muted)]">{stat.label}</p>

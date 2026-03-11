@@ -7,6 +7,15 @@
   --surface: #ffffff;
   --foreground: #0f172a;
   --muted: #475569;
+  --card-border: rgba(203, 213, 225, 0.9);
+  --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.94));
+  --card-shadow: 0 24px 80px rgba(148, 163, 184, 0.18);
+  --subtle-border: rgba(226, 232, 240, 0.95);
+  --subtle-bg: rgba(241, 245, 249, 0.9);
+  --subtle-shadow: 0 14px 40px rgba(148, 163, 184, 0.12);
+  --control-border: rgba(203, 213, 225, 0.95);
+  --control-bg: rgba(255, 255, 255, 0.9);
+  --control-shadow: 0 12px 32px rgba(148, 163, 184, 0.12);
 }
 
 .dark {
@@ -14,6 +23,15 @@
   --surface: #111827;
   --foreground: #e5e7eb;
   --muted: #94a3b8;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-shadow: none;
+  --subtle-border: rgba(255, 255, 255, 0.08);
+  --subtle-bg: rgba(0, 0, 0, 0.12);
+  --subtle-shadow: none;
+  --control-border: rgba(255, 255, 255, 0.1);
+  --control-bg: rgba(255, 255, 255, 0.05);
+  --control-shadow: none;
 }
 
 html {
@@ -41,4 +59,24 @@ a {
 ::selection {
   background: rgba(37, 99, 235, 0.28);
   color: var(--foreground);
+}
+
+@layer components {
+  .surface-card {
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+  }
+
+  .surface-subtle {
+    border: 1px solid var(--subtle-border);
+    background: var(--subtle-bg);
+    box-shadow: var(--subtle-shadow);
+  }
+
+  .surface-control {
+    border: 1px solid var(--control-border);
+    background: var(--control-bg);
+    box-shadow: var(--control-shadow);
+  }
 }

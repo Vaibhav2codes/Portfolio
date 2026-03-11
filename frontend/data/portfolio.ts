@@ -38,19 +38,31 @@ export const socialLinks = [
   },
   {
     label: "LeetCode",
-    href: "https://leetcode.com/",
+    href: "https://leetcode.com/u/vaibhavcodes02/",
     icon: "leetcode",
     external: true
   },
   {
     label: "Codeforces",
-    href: "https://codeforces.com/",
+    href: "https://codeforces.com/profile/vaibhav02codes",
     icon: "codeforces",
     external: true
   },
   {
+    label: "CodeChef",
+    href: "https://www.codechef.com/users/vaibhavcodes02",
+    icon: "codechef",
+    external: true
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/vaibhav_02.11/",
+    icon: "instagram",
+    external: true
+  },
+  {
     label: "Resume",
-    href: "/Vaibhav_Singh_Resume.txt",
+    href: "/resume.pdf",
     icon: "resume",
     external: false
   }
@@ -65,7 +77,7 @@ export const heroKeywords = [
 ];
 
 export const stats = [
-  { label: "Years Experience", value: "2+" },
+  { label: "Years Experience", value: "1.5+" },
   { label: "DSA Problems Solved", value: "700+" },
   { label: "CodeChef Rating", value: "1705" },
   { label: "Education", value: "B.Tech NIT Kurukshetra" }
@@ -105,7 +117,7 @@ export const projects = [
   {
     title: "API Logging and Metrics Aggregation System",
     description:
-      "Developed a high-throughput API transaction monitoring system tracking internal and external platform traffic. Implemented custom Log4j2 appenders integrated with ORC-based storage pipelines. Reduced logging latency by around 50 percent using asynchronous ingestion workflows and built SQL aggregation jobs for latency percentiles, throughput and error rates.",
+      "Built a high-throughput API transaction monitoring system to track internal and external service traffic. Implemented custom Log4j2 appenders with an ORC-based logging pipeline for efficient structured storage. Introduced asynchronous log ingestion, reducing logging latency by ~50% and minimizing impact on application performance. Developed SQL aggregation pipelines to compute latency percentiles, throughput, and error rates. Enabled real-time observability and performance monitoring for large-scale backend services.",
     stack: ["Java", "Log4j2", "ORC", "SQL", "MongoDB"]
   },
   {
@@ -149,12 +161,12 @@ export const achievements = [
     description: "Reached a maximum CodeChef rating of 1705 through competitive programming."
   },
   {
-    title: "700+ DSA Problems Solved",
-    description: "Solved data structures and algorithms problems across LeetCode, CodeChef and Codeforces."
+    title: "Department Ranker, NIT Kurukshetra",
+    description: "Achieved department rank based on consistent academic excellence."
   },
   {
-    title: "Java 17 Masterclass Certification",
-    description: "Built stronger foundations in advanced Java language features and backend design patterns."
+    title: "700+ DSA Problems Solved",
+    description: "Solved data structures and algorithms problems across LeetCode, CodeChef and Codeforces."
   }
 ];
 
