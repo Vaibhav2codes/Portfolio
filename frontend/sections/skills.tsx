@@ -1,18 +1,15 @@
 import { motion } from "framer-motion";
 import { Chip } from "@/components/chip";
-import { SectionHeading } from "@/components/section-heading";
 import { skillGroups } from "@/data/portfolio";
 
 export function SkillsSection() {
   return (
     <section id="skills" className="scroll-mt-28 py-8">
-      <SectionHeading
-        eyebrow="Skills"
-        title="A stack centered on Java backend development, data systems and practical tooling."
-        description="Skills are grouped for fast scanning across languages, frameworks, data stores, distributed systems and developer tooling."
-      />
+      <div className="mb-10">
+        <p className="font-mono text-sm uppercase tracking-[0.32em] text-primary">Skills</p>
+      </div>
 
-      <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {skillGroups.map((group, index) => (
           <motion.article
             key={group.title}
