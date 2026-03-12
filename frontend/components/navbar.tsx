@@ -61,7 +61,6 @@ export function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                download={link.icon === "resume" ? true : undefined}
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noreferrer" : undefined}
                 aria-label={link.label}
@@ -112,7 +111,6 @@ export function Navbar() {
                     <a
                       key={link.label}
                       href={link.href}
-                      download={link.icon === "resume" ? true : undefined}
                       target={link.external ? "_blank" : undefined}
                       rel={link.external ? "noreferrer" : undefined}
                       aria-label={link.label}

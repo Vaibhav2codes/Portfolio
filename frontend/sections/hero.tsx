@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FaArrowRight, FaEnvelope, FaFileArrowDown } from "react-icons/fa6";
 import { Chip } from "@/components/chip";
 import { heroKeywords, siteConfig, stats } from "@/data/portfolio";
+import { RESUME_PUBLIC_URL } from "@/utils/resume";
 
 export function HeroSection() {
   const [index, setIndex] = useState(0);
@@ -50,8 +51,9 @@ export function HeroSection() {
             <FaArrowRight className="text-xs" />
           </a>
           <a
-            href="/resume.pdf"
-            download
+            href={RESUME_PUBLIC_URL}
+            target="_blank"
+            rel="noreferrer"
             className="surface-control inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:border-primary/50 hover:text-primary"
           >
             Download Resume

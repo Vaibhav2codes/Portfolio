@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
+import { RESUME_FILE_NAME } from "@/utils/resume";
 
 const MAX_RESUME_SIZE_BYTES = 5 * 1024 * 1024;
 
@@ -136,7 +137,8 @@ export default function AdminResumePage() {
             <p className="font-mono text-sm uppercase tracking-[0.28em] text-primary">Resume Admin</p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Update Resume</h1>
             <p className="mt-4 text-base leading-7 text-[var(--muted)]">
-              Uploading a new PDF replaces the public file at <span className="font-mono text-primary">/resume.pdf</span>.
+              Uploading a new PDF replaces the public file at{" "}
+              <span className="font-mono text-primary">{RESUME_FILE_NAME}</span>.
             </p>
 
             <div className="surface-subtle mt-6 rounded-[1.5rem] p-4 text-sm text-[var(--muted)]">

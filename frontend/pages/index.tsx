@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { siteConfig } from "@/data/portfolio";
+import { useBackendWarmup } from "@/hooks/useBackendWarmup";
 import { AboutSection } from "@/sections/about";
 import { AchievementsSection } from "@/sections/achievements";
 import { ContactSection } from "@/sections/contact";
@@ -27,6 +28,8 @@ const GithubActivity = dynamic(
 );
 
 export default function HomePage() {
+  useBackendWarmup();
+
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const title = `${siteConfig.name} | ${siteConfig.title}`;
   const description = siteConfig.tagline;

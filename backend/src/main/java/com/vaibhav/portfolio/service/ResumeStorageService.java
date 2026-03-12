@@ -23,7 +23,6 @@ import java.util.Locale;
 @Service
 public class ResumeStorageService {
 
-    private static final String RESUME_FILE_NAME = "resume.pdf";
     private static final byte[] PDF_SIGNATURE = "%PDF-".getBytes();
 
     private final PortfolioResumeProperties resumeProperties;
@@ -62,7 +61,7 @@ public class ResumeStorageService {
             }
         }
 
-        return new ResumeMetadataResponse(true, "Resume metadata fetched successfully.", RESUME_FILE_NAME, lastUpdated);
+        return new ResumeMetadataResponse(true, "Resume metadata fetched successfully.", getResumeFileName(), lastUpdated);
     }
 
     public ResumeUploadResponse replaceResume(String password, MultipartFile file) throws IOException {
@@ -91,7 +90,7 @@ public class ResumeStorageService {
             return new ResumeUploadResponse(
                     true,
                     "Resume updated successfully",
-                    RESUME_FILE_NAME,
+                    getResumeFileName(),
                     java.time.Instant.now().toString()
             );
         } catch (RestClientResponseException exception) {
@@ -178,5 +177,11 @@ public class ResumeStorageService {
             return "";
         }
         return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
+    }
+
+    private String getResumeFileName() {
+        String objectPath = resumeProperties.supabaseObjectPath().trim();
+        int lastSlashIndex = objectPath.lastIndexOf('/');
+        return lastSlashIndex >= 0 ? objectPath.substring(lastSlashIndex + 1) : objectPath;
     }
 }

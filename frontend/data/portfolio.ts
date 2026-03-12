@@ -1,3 +1,5 @@
+import { RESUME_PUBLIC_URL } from "@/utils/resume";
+
 export const siteConfig = {
   name: "Vaibhav Singh",
   title: "Software Development Engineer",
@@ -62,9 +64,9 @@ export const socialLinks = [
   },
   {
     label: "Resume",
-    href: "/resume.pdf",
+    href: RESUME_PUBLIC_URL,
     icon: "resume",
-    external: false
+    external: true
   }
 ] as const;
 

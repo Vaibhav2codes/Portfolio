@@ -30,7 +30,7 @@ class ResumeStorageServiceTest {
         MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
         ResumeStorageService service = new ResumeStorageService(properties(), builder);
 
-        server.expect(once(), requestTo("https://project.supabase.co/storage/v1/object/portfolio-assets/resume.pdf"))
+        server.expect(once(), requestTo("https://project.supabase.co/storage/v1/object/portfolio-assets/Vaibhav_SDE_Resume.pdf"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(header(HttpHeaders.AUTHORIZATION, "Bearer service-role-key"))
                 .andExpect(header("apikey", "service-role-key"))
@@ -46,7 +46,7 @@ class ResumeStorageServiceTest {
 
         ResumeUploadResponse response = service.replaceResume("secret123", file);
 
-        assertEquals("resume.pdf", response.fileName());
+        assertEquals("Vaibhav_SDE_Resume.pdf", response.fileName());
         assertEquals("Resume updated successfully", response.message());
         assertNotNull(response.lastUpdated());
         server.verify();
@@ -58,14 +58,14 @@ class ResumeStorageServiceTest {
         MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
         ResumeStorageService service = new ResumeStorageService(properties(), builder);
 
-        server.expect(once(), requestTo("https://project.supabase.co/storage/v1/object/public/portfolio-assets/resume.pdf"))
+        server.expect(once(), requestTo("https://project.supabase.co/storage/v1/object/public/portfolio-assets/Vaibhav_SDE_Resume.pdf"))
                 .andExpect(method(HttpMethod.HEAD))
                 .andRespond(withStatus(HttpStatus.OK)
                         .header(HttpHeaders.LAST_MODIFIED, "Wed, 11 Mar 2026 18:30:00 GMT"));
 
         ResumeMetadataResponse response = service.getMetadata();
 
-        assertEquals("resume.pdf", response.fileName());
+        assertEquals("Vaibhav_SDE_Resume.pdf", response.fileName());
         assertEquals("2026-03-11T18:30:00Z", response.lastUpdated());
         server.verify();
     }
@@ -108,7 +108,7 @@ class ResumeStorageServiceTest {
         ResumeStorageService service = new ResumeStorageService(properties(), RestClient.builder());
 
         assertEquals(
-                "https://project.supabase.co/storage/v1/object/public/portfolio-assets/resume.pdf",
+                "https://project.supabase.co/storage/v1/object/public/portfolio-assets/Vaibhav_SDE_Resume.pdf",
                 service.getPublicResumeUri().toString()
         );
     }
@@ -120,7 +120,7 @@ class ResumeStorageServiceTest {
                 "https://project.supabase.co",
                 "service-role-key",
                 "portfolio-assets",
-                "resume.pdf"
+                "Vaibhav_SDE_Resume.pdf"
         );
     }
 }

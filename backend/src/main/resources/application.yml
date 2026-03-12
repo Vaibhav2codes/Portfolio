@@ -15,7 +15,7 @@ portfolio:
     supabase-url: ${SUPABASE_URL:}
     supabase-service-role-key: ${SUPABASE_SERVICE_ROLE_KEY:}
     supabase-bucket: ${SUPABASE_BUCKET:portfolio-assets}
-    supabase-object-path: ${SUPABASE_OBJECT_PATH:resume.pdf}
+    supabase-object-path: ${SUPABASE_OBJECT_PATH:Vaibhav_SDE_Resume.pdf}
 
 spring:
   servlet:
