@@ -1,24 +1,21 @@
 # Vaibhav Singh Portfolio
 
-Full-stack portfolio application for a backend-focused software engineer. The repo contains a Next.js frontend, a Spring Boot backend, a recruiter-facing portfolio site, a contact workflow backed by SMTP, GitHub activity visualizations, and an admin flow for replacing the public resume PDF.
+Full-stack portfolio application with a Next.js frontend and a Spring Boot backend. It includes a recruiter-facing site, a contact form backed by SMTP, GitHub activity widgets, and an admin flow for replacing the public resume.
 
-## Architecture
+## Structure
 
-- `frontend/`: Next.js 14 + TypeScript portfolio UI
+- `frontend/`: Next.js 14 + TypeScript UI
 - `backend/`: Spring Boot 3.3 API for contact, resume, and health endpoints
-- `render.yaml`: Render deployment blueprint for both services
 
-The frontend proxies portfolio API traffic through Next.js rewrites, so the browser talks to the frontend origin while the frontend forwards to the backend.
+The frontend proxies API traffic through Next.js rewrites, so browser requests stay on the frontend origin while the server forwards them to the backend.
 
 ## Features
 
-- Responsive single-page portfolio with sections for hero, about, experience, projects, skills, achievements, GitHub activity, and contact
-- Animated UI using Tailwind CSS and Framer Motion
-- Dynamic GitHub activity dashboard with contribution heatmap, repo stats, language breakdown, and recent repositories
-- Contact form that posts to the Spring Boot backend and sends email through SMTP
-- Resume delivery through `/resume.pdf` backed by the backend
-- Protected admin page at `/admin` for uploading a replacement resume PDF
-- Health endpoint for deployment checks
+- Single-page portfolio with hero, about, experience, projects, skills, achievements, GitHub activity, and contact sections
+- Contact form that posts to the backend and sends mail through SMTP
+- Public resume delivery through `/resume.pdf`
+- Protected `/admin` page for replacing the resume PDF
+- Health endpoint for uptime and deployment checks
 
 ## Tech Stack
 
@@ -43,20 +40,20 @@ The frontend proxies portfolio API traffic through Next.js rewrites, so the brow
 - Maven
 - `spring-dotenv`
 
-## Application Routes
+## Routes
 
 ### Frontend
 
 - `/`: portfolio homepage
-- `/admin`: resume upload admin page
+- `/admin`: resume upload page
 
 ### Backend API
 
-- `GET /api/health`: health check
-- `POST /api/contact`: send contact email
-- `GET /api/resume/metadata`: fetch resume metadata
-- `GET /api/resume/file`: redirect to the public resume asset
-- `POST /api/resume/admin`: upload and replace resume PDF
+- `GET /api/health`
+- `POST /api/contact`
+- `GET /api/resume/metadata`
+- `GET /api/resume/file`
+- `POST /api/resume/admin`
 
 ### Frontend Rewrites
 
@@ -75,16 +72,16 @@ Configured in `frontend/next.config.js`:
 - Java 21
 - Maven 3.9+
 
-### 1. Run the backend
+### Backend
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-Backend default URL: `http://localhost:8080`
+Runs on `http://localhost:8080` by default.
 
-### 2. Run the frontend
+### Frontend
 
 ```bash
 cd frontend
@@ -92,7 +89,7 @@ npm install
 npm run dev
 ```
 
-Frontend default URL: `http://localhost:3000`
+Runs on `http://localhost:3000` by default.
 
 ## Environment Variables
 
@@ -102,13 +99,13 @@ Set these in `frontend/.env.local` when needed:
 
 - `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
 - `NEXT_PUBLIC_API_BASE_URL=http://localhost:8080`
-- `BACKEND_INTERNAL_URL=` for internal service-to-service routing in deployment environments
+- `BACKEND_INTERNAL_URL=`
 
-`BACKEND_INTERNAL_URL` is used preferentially by Next.js rewrites when present. Otherwise the frontend falls back to `NEXT_PUBLIC_API_BASE_URL`, then `http://localhost:8080`.
+`BACKEND_INTERNAL_URL` is optional and is used first when the frontend needs a private backend address in deployment. If it is not set, the app falls back to `NEXT_PUBLIC_API_BASE_URL`, then `http://localhost:8080`.
 
 ### Backend
 
-Set these in `backend/.env` or your shell:
+Set these in `backend/.env` or your runtime environment:
 
 - `PORT=8080`
 - `SERVER_PORT=8080`
@@ -132,12 +129,12 @@ Set these in `backend/.env` or your shell:
 
 ## Resume Flow
 
-- Public resume downloads are served through `/resume.pdf`
-- The backend resolves the current public resume location and redirects to the stored asset
-- The admin page uploads a PDF to the backend using multipart form data
-- The backend validates file size and admin password before replacing the stored resume
+- `/resume.pdf` is served through the frontend and forwarded to the backend
+- The backend resolves the current public resume asset and redirects to it
+- The admin page uploads a new PDF with multipart form data
+- The backend validates file size and admin password before replacing the stored file
 
-## Quality Checks
+## Checks
 
 ### Frontend
 
@@ -153,17 +150,14 @@ cd backend
 mvn test
 ```
 
-## Deployment
+## Deployment Notes
 
-`render.yaml` defines two Render services:
-
-- `portfolio-backend`: Docker-based Spring Boot service with `/api/health` health check
-- `portfolio-frontend`: Node-based Next.js service that talks to the backend through `BACKEND_INTERNAL_URL`
-
-For production, configure the frontend public URL and backend CORS origin to match the deployed domain.
+- Set `FRONTEND_URL` on the backend to the deployed frontend origin
+- Set `NEXT_PUBLIC_SITE_URL` on the frontend to the deployed public URL
+- Use `BACKEND_INTERNAL_URL` only if your host provides a private backend address for server-to-server calls
+- Resume files are expected to be managed through the backend and Supabase, not from `frontend/public`
 
 ## Notes
 
-- `frontend/tsconfig.tsbuildinfo` is a generated TypeScript build artifact and should usually stay untracked
-- `backend/uploads/` is a local storage artifact if resume files are handled on disk during development
-- `frontend/public/resume.pdf` is not required when the backend-managed resume flow is used
+- `frontend/tsconfig.tsbuildinfo` is a generated file and should stay untracked
+- `backend/uploads/` is a local artifact and should stay untracked

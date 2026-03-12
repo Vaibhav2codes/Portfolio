@@ -3,9 +3,11 @@ frontend/node_modules/
 frontend/out/
 frontend/.env.local
 frontend/.env
+frontend/tsconfig.tsbuildinfo
 backend/target/
 backend/.mvn/
 backend/.env
 backend/.idea/
+backend/uploads/
 .DS_Store
 Thumbs.db
