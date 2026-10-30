@@ -50,48 +50,48 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="surface-card space-y-5 rounded-[2rem] p-6 backdrop-blur dark:shadow-glow">
+    <form onSubmit={handleSubmit} className="surface-card space-y-5 rounded-3xl p-5 sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
-        <label className="space-y-2 text-sm">
-          <span className="text-[var(--muted)]">Name</span>
+        <label className="block space-y-2 text-sm">
+          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--faint)]">Name</span>
           <input
             required
             value={form.name}
             onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-            className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+            className="surface-subtle w-full rounded-xl px-4 py-3 text-[15px] text-[var(--foreground)] outline-none transition placeholder:text-[var(--faint)] focus:border-primary/60 focus:ring-4 focus:ring-primary/10"
             placeholder="Your name"
           />
         </label>
-        <label className="space-y-2 text-sm">
-          <span className="text-[var(--muted)]">Email</span>
+        <label className="block space-y-2 text-sm">
+          <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--faint)]">Email</span>
           <input
             required
             type="email"
             value={form.email}
             onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-            className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+            className="surface-subtle w-full rounded-xl px-4 py-3 text-[15px] text-[var(--foreground)] outline-none transition placeholder:text-[var(--faint)] focus:border-primary/60 focus:ring-4 focus:ring-primary/10"
             placeholder="you@example.com"
           />
         </label>
       </div>
-      <label className="space-y-2 text-sm">
-        <span className="text-[var(--muted)]">Subject</span>
+      <label className="block space-y-2 text-sm">
+        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--faint)]">Subject</span>
         <input
           required
           value={form.subject}
           onChange={(event) => setForm((current) => ({ ...current, subject: event.target.value }))}
-          className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+          className="surface-subtle w-full rounded-xl px-4 py-3 text-[15px] text-[var(--foreground)] outline-none transition placeholder:text-[var(--faint)] focus:border-primary/60 focus:ring-4 focus:ring-primary/10"
           placeholder="Message subject or title"
         />
       </label>
-      <label className="space-y-2 text-sm">
-        <span className="text-[var(--muted)]">Message</span>
+      <label className="block space-y-2 text-sm">
+        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--faint)]">Message</span>
         <textarea
           required
           rows={6}
           value={form.message}
           onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
-          className="surface-subtle w-full rounded-2xl px-4 py-3 text-[var(--foreground)] outline-none transition focus:border-primary"
+          className="surface-subtle w-full rounded-xl px-4 py-3 text-[15px] text-[var(--foreground)] outline-none transition placeholder:text-[var(--faint)] focus:border-primary/60 focus:ring-4 focus:ring-primary/10"
           placeholder="Tell me about the role, team or problem space."
         />
       </label>
@@ -100,12 +100,12 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-[0_10px_30px_-10px_rgba(37,99,235,0.7)] transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {status === "loading" ? "Sending..." : "Send Message"}
         </button>
         {feedback ? (
-          <p className={`text-sm ${status === "success" ? "text-accent" : "text-rose-400"}`}>{feedback}</p>
+          <p role="status" className={`text-sm ${status === "success" ? "text-emerald-600 dark:text-accent" : "text-rose-500 dark:text-rose-400"}`}>{feedback}</p>
         ) : null}
       </div>
     </form>

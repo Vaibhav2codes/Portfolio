@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en" suppressHydrationWarning>
       <Head>
         <meta charSet="utf-8" />
-        <meta name="theme-color" content="#0F172A" />
+        <meta name="theme-color" content="#080C15" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
       <body>

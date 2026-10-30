@@ -1,36 +1,75 @@
-import { motion } from "framer-motion";
-import { Chip } from "@/components/chip";
-import { skillGroups } from "@/data/portfolio";
+import { Reveal } from "@/components/reveal";
+import { SectionHeading } from "@/components/section-heading";
+import { experienceItems, projects, skillGroups } from "@/data/portfolio";
+
+// Skill names that are spelled differently in the experience/project data.
+const aliases: Record<string, string> = {
+  "GCP (Cloud Run, GCS)": "Google Cloud"
+};
+
+const usedAtWork = new Set<string>([
+  ...experienceItems.flatMap((item) => item.technologies),
+  ...projects.flatMap((project) => project.stack)
+]);
+
+function isUsedAtWork(skill: string) {
+  return usedAtWork.has(skill) || usedAtWork.has(aliases[skill] ?? "");
+}
 
 export function SkillsSection() {
-  return (
-    <section id="skills" className="scroll-mt-28 py-8">
-      <div className="mb-10">
-        <p className="font-mono text-sm uppercase tracking-[0.32em] text-primary">Skills</p>
-      </div>
+  const totalSkills = skillGroups.reduce((count, group) => count + group.items.length, 0);
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+  return (
+    <section id="skills" aria-labelledby="skills-title" className="scroll-mt-24 py-14 sm:py-20">
+      <SectionHeading
+        index="04"
+        title="Skills"
+        id="skills-title"
+        aside={
+          <p className="flex items-center gap-2.5 font-mono text-xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+            Used in professional work · {totalSkills} total
+          </p>
+        }
+      />
+
+      <div>
         {skillGroups.map((group, index) => (
-          <motion.article
+          <Reveal
             key={group.title}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.45, delay: index * 0.05 }}
-            className="surface-card rounded-[2rem] p-6 transition duration-300 hover:-translate-y-1 hover:border-primary/20 dark:hover:border-primary/35"
+            delay={index * 0.04}
+            y={12}
+            className="group grid gap-4 border-t border-line py-6 transition-colors duration-300 first:border-t-0 md:grid-cols-[16rem_minmax(0,1fr)] md:items-baseline md:gap-8 md:py-7"
           >
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="text-xl font-semibold text-[var(--foreground)]">{group.title}</h3>
-              <span className="surface-subtle rounded-full px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
-                {group.items.length} items
+            <h3 className="flex items-baseline gap-3 text-[var(--muted)] transition-colors duration-300 group-hover:text-[var(--foreground)]">
+              <span className="font-mono text-[11px] text-[var(--faint)]">{String(index + 1).padStart(2, "0")}</span>
+              <span className="text-sm font-medium uppercase tracking-[0.14em]">
+                {group.title}
+                <span className="ml-2 font-mono text-[11px] tracking-normal text-[var(--faint)]">
+                  ({group.items.length})
+                </span>
               </span>
-            </div>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {group.items.map((item) => (
-                <Chip key={item}>{item}</Chip>
-              ))}
-            </div>
-          </motion.article>
+            </h3>
+            <ul className="flex flex-wrap gap-x-2 gap-y-3">
+              {group.items.map((item) => {
+                const used = isUsedAtWork(item);
+                return (
+                  <li
+                    key={item}
+                    className="inline-flex items-center gap-2 rounded-full border border-line px-3.5 py-1.5 font-display text-base font-medium tracking-[-0.01em] text-[var(--foreground)] transition-colors duration-300 hover:border-primary/50 hover:bg-primary/5 sm:text-lg"
+                  >
+                    {used ? (
+                      <>
+                        <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+                        <span className="sr-only">Used in professional work: </span>
+                      </>
+                    ) : null}
+                    {item}
+                  </li>
+                );
+              })}
+            </ul>
+          </Reveal>
         ))}
       </div>
     </section>
