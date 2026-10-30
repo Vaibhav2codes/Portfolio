@@ -1,54 +1,68 @@
-import { motion } from "framer-motion";
-import { FaArrowUpRightFromSquare } from "react-icons/fa6";
+import { FaArrowRight } from "react-icons/fa6";
 import { ContactForm } from "@/components/contact-form";
-import { contactLinks } from "@/data/portfolio";
+import { Reveal } from "@/components/reveal";
+import { SectionHeading } from "@/components/section-heading";
+import { socialIcons } from "@/components/social-icons";
+import { contactLinks, socialLinks } from "@/data/portfolio";
 
 export function ContactSection() {
   return (
-    <section id="contact" className="scroll-mt-28 py-8">
-      <div className="mb-10">
-        <p className="font-mono text-sm uppercase tracking-[0.32em] text-primary">Contact</p>
-      </div>
+    <section id="contact" aria-labelledby="contact-title" className="scroll-mt-24 py-14 sm:py-20">
+      <SectionHeading index="07" title="Contact" id="contact-title" />
 
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.25 }}
-        transition={{ duration: 0.5 }}
-        className="surface-card rounded-[2rem] p-6 sm:p-8"
-      >
-        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-          <div>
-            <p className="font-mono text-sm uppercase tracking-[0.24em] text-primary">Reach out</p>
-            <div className="mt-6 space-y-4">
-              {contactLinks.map((item) => (
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+        <Reveal>
+          <p className="eyebrow">Reach out</p>
+          <ul className="mt-4 border-t border-line">
+            {contactLinks.map((item) => {
+              const external = item.href.startsWith("http");
+              return (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    target={external ? "_blank" : undefined}
+                    rel={external ? "noreferrer" : undefined}
+                    className="group flex items-center justify-between gap-4 border-b border-line py-5"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--faint)]">
+                        {item.label}
+                      </p>
+                      <p className="mt-1.5 truncate text-[15px] text-[var(--foreground)] transition-colors group-hover:text-ink">
+                        {item.value}
+                      </p>
+                    </div>
+                    <FaArrowRight className="shrink-0 -rotate-45 text-xs text-[var(--faint)] transition-all duration-300 group-hover:rotate-0 group-hover:text-ink" />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+
+          <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--faint)]">Elsewhere</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {socialLinks.map((link) => {
+              const Icon = socialIcons[link.icon];
+              return (
                 <a
-                  key={item.label}
-                  href={item.href}
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                  className="surface-subtle flex items-center justify-between rounded-[1.5rem] px-4 py-4 transition hover:border-primary/40"
+                  key={link.label}
+                  href={link.href}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noreferrer" : undefined}
+                  className="inline-flex items-center gap-2 rounded-full border border-line px-3.5 py-2 text-[13px] text-[var(--muted)] transition hover:border-primary/50 hover:text-[var(--foreground)]"
                 >
-                  <div>
-                    <p className="text-sm text-[var(--muted)]">{item.label}</p>
-                    <p className="mt-1 text-[var(--foreground)]">{item.value}</p>
-                  </div>
-                  <FaArrowUpRightFromSquare className="text-primary" />
+                  <Icon className="text-sm" aria-hidden="true" />
+                  {link.label}
                 </a>
-              ))}
-            </div>
+              );
+            })}
           </div>
+        </Reveal>
 
-          <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.5, delay: 0.05 }}
-          >
-            <ContactForm />
-          </motion.div>
-        </div>
-      </motion.div>
+        <Reveal delay={0.08}>
+          <ContactForm />
+        </Reveal>
+      </div>
     </section>
   );
 }

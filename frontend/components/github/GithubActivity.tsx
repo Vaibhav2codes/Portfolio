@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { FaArrowUpRightFromSquare, FaCodeBranch, FaStar } from "react-icons/fa6";
+import { SectionHeading } from "@/components/section-heading";
 import { GithubApiError, type GithubActivitySummary, fetchGithubActivitySummary } from "@/utils/githubApi";
 
 type GithubActivityProps = {
@@ -19,10 +20,10 @@ const CALENDAR_THEME = {
 };
 
 const PANEL_CLASS =
-  "surface-card rounded-[2rem]";
+  "surface-card rounded-3xl";
 
 const SUBTLE_PANEL_CLASS =
-  "surface-subtle rounded-[1.5rem]";
+  "surface-subtle rounded-2xl";
 
 const GitHubCalendar = dynamic(
   () => import("react-github-calendar").then((module) => module.GitHubCalendar),
@@ -130,10 +131,8 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
   );
 
   return (
-    <section id="github-activity" className="scroll-mt-28 py-8">
-      <div className="mb-10">
-        <p className="font-mono text-sm uppercase tracking-[0.32em] text-primary">GitHub Activity</p>
-      </div>
+    <section id="github-activity" aria-labelledby="github-activity-title" className="scroll-mt-24 py-14 sm:py-20">
+      <SectionHeading index="06" title="GitHub Activity" id="github-activity-title" />
 
       <div className="space-y-6">
         <motion.div
@@ -147,7 +146,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
             <div className="min-w-0">
               <div className="flex flex-col gap-5 border-b border-slate-200/80 pb-5 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                  <p className="font-mono text-sm uppercase tracking-[0.24em] text-primary">
+                  <p className="eyebrow">
                     Contribution Heatmap
                   </p>
                 </div>
@@ -168,7 +167,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
                     href={profileUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition hover:border-primary/60 hover:bg-primary/15"
+                    className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium text-ink transition hover:border-primary/60 hover:bg-primary/15"
                   >
                     View Profile
                     <FaArrowUpRightFromSquare className="text-xs" />
@@ -211,7 +210,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.35 }}
-            className="rounded-[2rem] border border-amber-300/60 bg-amber-50 p-6 text-amber-900 dark:border-amber-400/25 dark:bg-amber-500/10 dark:text-amber-50/90"
+            className="rounded-3xl border border-amber-300/60 bg-amber-50 p-6 text-amber-900 dark:border-amber-400/25 dark:bg-amber-500/10 dark:text-amber-50/90"
           >
             <p className="font-mono text-sm uppercase tracking-[0.24em] text-amber-600 dark:text-amber-300">
               Data Notice
@@ -234,7 +233,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
                 >
                   <p className="text-sm text-[var(--muted)]">{stat.label}</p>
                   <p className="mt-4 text-3xl font-semibold tracking-tight text-[var(--foreground)]">{stat.value}</p>
-                  <p className="mt-2 font-mono text-xs uppercase tracking-[0.18em] text-primary">
+                  <p className="mt-2 font-mono text-xs uppercase tracking-[0.18em] text-ink">
                     {stat.sublabel}
                   </p>
                 </motion.article>
@@ -249,7 +248,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
                 transition={{ duration: 0.4 }}
                 className={`${PANEL_CLASS} p-6`}
               >
-                <p className="font-mono text-sm uppercase tracking-[0.24em] text-primary">
+                <p className="eyebrow">
                   Top Languages
                 </p>
                 <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
@@ -285,7 +284,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
                         </ResponsiveContainer>
                         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                           <div className="surface-control rounded-full px-5 py-4 text-center dark:bg-slate-900/90">
-                            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
+                            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink">
                               Languages
                             </p>
                             <p className="mt-2 text-2xl font-semibold text-[var(--foreground)]">
@@ -337,7 +336,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
               >
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                   <div>
-                    <p className="font-mono text-sm uppercase tracking-[0.24em] text-primary">
+                    <p className="eyebrow">
                       Recent Repositories
                     </p>
                     <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
@@ -369,14 +368,14 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h3 className="text-lg font-semibold text-[var(--foreground)] transition group-hover:text-primary">
+                          <h3 className="text-lg font-semibold text-[var(--foreground)] transition group-hover:text-ink">
                             {repository.name}
                           </h3>
                           <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
                             {repository.description || "No description provided for this repository."}
                           </p>
                         </div>
-                        <FaArrowUpRightFromSquare className="mt-1 shrink-0 text-sm text-[var(--muted)] transition group-hover:text-primary" />
+                        <FaArrowUpRightFromSquare className="mt-1 shrink-0 text-sm text-[var(--muted)] transition group-hover:text-ink" />
                       </div>
 
                       <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
@@ -393,7 +392,7 @@ export function GithubActivity({ username = "Vaibhav2codes" }: GithubActivityPro
                         </span>
                       </div>
 
-                      <p className="mt-4 font-mono text-xs uppercase tracking-[0.18em] text-primary">
+                      <p className="mt-4 font-mono text-xs uppercase tracking-[0.18em] text-ink">
                         Updated {dateFormatter.format(new Date(repository.updatedAt))}
                       </p>
                     </motion.a>
@@ -439,7 +438,7 @@ function ProfileCard({
             href={profileUrl}
             target="_blank"
             rel="noreferrer"
-            className="mt-1 inline-flex items-center gap-2 text-sm text-[var(--muted)] transition hover:text-primary"
+            className="mt-1 inline-flex items-center gap-2 text-sm text-[var(--muted)] transition hover:text-ink"
           >
             @{activity.profile.username}
             <FaArrowUpRightFromSquare className="text-[10px]" />

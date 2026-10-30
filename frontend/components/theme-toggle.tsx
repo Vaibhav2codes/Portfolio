@@ -11,7 +11,7 @@ export function ThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return <div className="surface-control h-10 w-10 rounded-full" />;
+    return <div className="surface-control h-9 w-9 rounded-full" />;
   }
 
   const isDark = resolvedTheme === "dark";
@@ -21,7 +21,7 @@ export function ThemeToggle() {
       type="button"
       aria-label="Toggle theme"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="surface-control inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-[var(--foreground)] backdrop-blur transition hover:border-primary/60 hover:text-primary"
+      className="surface-control inline-flex h-9 w-9 items-center justify-center rounded-full text-base text-[var(--foreground)] transition hover:border-primary/50 hover:text-ink"
     >
       {isDark ? <HiMiniSun /> : <HiMiniMoon />}
     </button>

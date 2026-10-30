@@ -1,56 +1,132 @@
-import { motion } from "framer-motion";
+import { useId, useRef, useState } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { FaPlus } from "react-icons/fa6";
 import { Chip } from "@/components/chip";
+import { EASE_OUT, Reveal } from "@/components/reveal";
+import { SectionHeading } from "@/components/section-heading";
 import { experienceItems } from "@/data/portfolio";
+import { highlightMetrics } from "@/utils/highlight-metrics";
+
+const VISIBLE_POINTS = 5;
+
+function ImpactPoint({ point }: { point: string }) {
+  return (
+    <li className="flex gap-3">
+      <span className="mt-[0.7rem] h-px w-3 shrink-0 bg-[var(--faint)]" aria-hidden="true" />
+      <p className="text-pretty">{highlightMetrics(point)}</p>
+    </li>
+  );
+}
+
+/** Shows the first few points; the rest stay in the DOM (for search) and expand on demand. */
+function ImpactList({ points }: { points: string[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const moreId = useId();
+  const visible = points.slice(0, VISIBLE_POINTS);
+  const hidden = points.slice(VISIBLE_POINTS);
+  const listClass = "space-y-3 text-[15px] leading-7 text-[var(--muted)]";
+
+  return (
+    <div className="mt-6">
+      <ul className={listClass}>
+        {visible.map((point) => (
+          <ImpactPoint key={point} point={point} />
+        ))}
+      </ul>
+
+      {hidden.length > 0 ? (
+        <>
+          <motion.div
+            id={moreId}
+            initial={false}
+            animate={expanded ? "open" : "closed"}
+            variants={{
+              open: { height: "auto", opacity: 1, visibility: "visible" },
+              closed: { height: 0, opacity: 0, transitionEnd: { visibility: "hidden" } }
+            }}
+            transition={{ duration: 0.45, ease: EASE_OUT }}
+            className="overflow-hidden"
+          >
+            <ul className={`${listClass} pt-3`}>
+              {hidden.map((point) => (
+                <ImpactPoint key={point} point={point} />
+              ))}
+            </ul>
+          </motion.div>
+          <button
+            type="button"
+            onClick={() => setExpanded((value) => !value)}
+            aria-expanded={expanded}
+            aria-controls={moreId}
+            className="mt-4 inline-flex items-center gap-2 text-[13px] font-medium text-[var(--foreground)] transition hover:text-ink"
+          >
+            <FaPlus
+              className={`text-[10px] text-ink transition-transform duration-300 ${expanded ? "rotate-45" : ""}`}
+            />
+            {expanded ? "Show less" : `Show ${hidden.length} more`}
+          </button>
+        </>
+      ) : null}
+    </div>
+  );
+}
 
 export function ExperienceSection() {
+  const listRef = useRef<HTMLOListElement>(null);
+  const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 70%", "end 60%"] });
+  const railProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
+
   return (
-    <section id="experience" className="scroll-mt-28 py-8">
-      <div className="mb-10">
-        <p className="font-mono text-sm uppercase tracking-[0.32em] text-primary">Experience</p>
-      </div>
+    <section id="experience" aria-labelledby="experience-title" className="scroll-mt-24 py-14 sm:py-20">
+      <SectionHeading index="02" title="Experience" id="experience-title" />
 
-      <div className="relative space-y-8 before:absolute before:bottom-6 before:left-5 before:top-4 before:w-px before:bg-gradient-to-b before:from-primary/40 before:via-white/10 before:to-transparent lg:before:left-10">
-        {experienceItems.map((item, index) => (
-          <motion.article
-            key={`${item.company}-${item.role}`}
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: index * 0.08 }}
-            className="relative pl-14 lg:pl-24"
-          >
-            <div className="absolute left-0 top-6 flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 bg-[linear-gradient(180deg,rgba(37,99,235,0.22),rgba(37,99,235,0.08))] text-sm font-semibold text-primary shadow-glow lg:left-5">
-              {index + 1}
-            </div>
+      <ol ref={listRef} className="relative">
+        <span
+          className="absolute bottom-2 left-[5px] top-2 w-px bg-[var(--line-strong)] md:left-[calc(13rem+5px)]"
+          aria-hidden="true"
+        />
+        <motion.span
+          style={{ scaleY: railProgress }}
+          className="absolute bottom-2 left-[5px] top-2 w-px origin-top bg-gradient-to-b from-primary via-primary to-primary/0 md:left-[calc(13rem+5px)]"
+          aria-hidden="true"
+        />
 
-            <div className="surface-card relative overflow-hidden rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(241,245,249,0.94))] p-6 transition duration-300 hover:-translate-y-1 hover:border-primary/30 dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(15,23,42,0.28))] dark:hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(15,23,42,0.34))]">
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+        {experienceItems.map((item, index) => {
+          const isCurrent = index === 0;
+          return (
+            <Reveal
+              as="li"
+              key={`${item.company}-${item.role}`}
+              delay={index * 0.05}
+              className="group relative grid gap-4 pb-14 pl-8 last:pb-0 md:grid-cols-[13rem_minmax(0,1fr)] md:gap-0 md:pl-0"
+            >
+              <span
+                className="absolute left-0 top-2 flex h-[11px] w-[11px] md:left-[13rem]"
+                aria-hidden="true"
+              >
+                {isCurrent ? (
+                  <span className="animate-status-ping absolute inline-flex h-full w-full rounded-full bg-accent" />
+                ) : null}
+                <span
+                  className={`relative inline-flex h-[11px] w-[11px] rounded-full border-2 border-[var(--background)] ${
+                    isCurrent ? "bg-accent" : "bg-primary"
+                  }`}
+                />
+              </span>
 
-              <div className="grid gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(260px,0.7fr)] lg:items-start">
-                <div>
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-2xl font-semibold text-[var(--foreground)] sm:text-[2rem]">
-                        {item.company}
-                      </h3>
-                      <p className="mt-2 text-base text-primary sm:text-lg">{item.role}</p>
-                    </div>
-                    <span className="surface-control px-3 py-1 font-mono text-xs uppercase tracking-[0.18em] text-accent">
-                      Role 0{index + 1}
-                    </span>
-                  </div>
+              <div className="font-mono text-xs uppercase leading-6 tracking-[0.1em] text-[var(--faint)] md:pr-8 md:pt-0.5 md:text-right">
+                <p className={isCurrent ? "text-[var(--foreground)]" : undefined}>{item.duration}</p>
+                <p>{item.location}</p>
+              </div>
 
-                  <div className="mt-6 grid gap-3 text-sm leading-7 text-[var(--muted)] sm:text-[15px]">
-                    {item.description.map((point) => (
-                      <div
-                        key={point}
-                        className="surface-subtle flex gap-3 rounded-2xl px-4 py-3"
-                      >
-                        <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-primary/80" />
-                        <p>{point}</p>
-                      </div>
-                    ))}
-                  </div>
+              <div className="md:pl-12">
+                <div className="rounded-2xl border border-transparent transition-colors duration-500 md:-m-6 md:p-6 md:group-hover:border-line md:group-hover:bg-[var(--subtle-bg)]">
+                  <h3 className="font-display text-2xl font-semibold tracking-[-0.025em] text-[var(--foreground)] sm:text-3xl">
+                    {item.company}
+                  </h3>
+                  <p className="mt-1.5 text-base font-medium text-ink">{item.role}</p>
+
+                  <ImpactList points={item.description} />
 
                   <div className="mt-6 flex flex-wrap gap-2">
                     {item.technologies.map((tech) => (
@@ -58,29 +134,11 @@ export function ExperienceSection() {
                     ))}
                   </div>
                 </div>
-
-                <aside className="surface-subtle rounded-[1.5rem] p-5">
-                  <p className="font-mono text-xs uppercase tracking-[0.24em] text-primary">Timeline</p>
-                  <div className="mt-5 space-y-5 text-sm text-[var(--muted)]">
-                    <div>
-                      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Duration</p>
-                      <p className="mt-2 text-base text-[var(--foreground)]">{item.duration}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Location</p>
-                      <p className="mt-2 text-base text-[var(--foreground)]">{item.location}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">Focus</p>
-                      <p className="mt-2 leading-7">{item.technologies.slice(0, 3).join(" / ")}</p>
-                    </div>
-                  </div>
-                </aside>
               </div>
-            </div>
-          </motion.article>
-        ))}
-      </div>
+            </Reveal>
+          );
+        })}
+      </ol>
     </section>
   );
 }

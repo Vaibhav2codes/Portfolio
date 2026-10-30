@@ -17,10 +17,16 @@ const config: Config = {
         slatebase: "#0F172A",
         textbase: "#E5E7EB",
         lightbg: "#F8FAFC",
-        lightsurface: "#FFFFFF"
+        lightsurface: "#FFFFFF",
+        ink: "rgb(var(--primary-ink) / <alpha-value>)"
+      },
+      borderColor: {
+        line: "var(--line)",
+        "line-strong": "var(--line-strong)"
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-inter)", "sans-serif"],
         mono: ["var(--font-jetbrains)", "monospace"]
       },
       boxShadow: {
